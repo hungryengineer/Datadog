@@ -26,7 +26,12 @@ jobs:
         working-directory: ./Application
         run: mvn clean package
 
-      # Step 4: Log in to GitHub Container Registry
+      # Step 4: Download Datadog Java Agent
+      - name: Download Datadog Java Agent
+        working-directory: ./Application
+        run: curl -Lo dd-java-agent.jar 'https://dtdg.co/latest-java-tracer'
+
+      # Step 5: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -34,12 +39,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 5: Build Docker Image
+      # Step 6: Build Docker Image
       - name: Build Docker Image
         run: |
           docker build -t ghcr.io/${{ github.repository_owner }}/hello-world-app:${{github.run_number}} -f ./Application/Dockerfile .
 
-      # Step 6: Push Docker Image to GitHub Packages
+      # Step 7: Push Docker Image to GitHub Packages
       - name: Push Docker Image
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/hello-world-app:${{github.run_number}}
