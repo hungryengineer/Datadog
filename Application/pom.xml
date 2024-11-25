@@ -56,6 +56,7 @@
                     <mainClass>com.example.helloworld.HelloWorldApplication</mainClass>
                     <layout>JAR</layout>
                     <verbose>true</verbose>
+                    <skipIfEmpty>true</skipIfEmpty>
                 </configuration>
             </plugin>
 
@@ -70,11 +71,20 @@
                 </configuration>
             </plugin>
 
-            <!-- Add maven-jar-plugin to specify manifest details if needed -->
+            <!-- Maven Jar Plugin to ensure the JAR is properly created before repackaging -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <archive>
                         <manifest>

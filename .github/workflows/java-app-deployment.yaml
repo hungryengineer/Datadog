@@ -26,22 +26,27 @@ jobs:
         working-directory: ./Application
         run: |
           mvn clean package -U -e -X
-          if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ]; then
-            echo "JAR built successfully."
+          if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ] || [ -f "target/hello-world-app-1.0-SNAPSHOT.jar.original" ]; then
+            echo "Original JAR built successfully."
           else
             echo "ERROR: JAR file not found in target directory!" >&2
             exit 1
           fi
 
-      # Step 4: Manually Run Spring Boot Repackage
+      # Step 4: Manually Run Spring Boot Repackage (if JAR exists)
       - name: Manually Run Spring Boot Repackage
         working-directory: ./Application
         run: |
-          mvn spring-boot:repackage -e -X
-          if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ]; then
-            echo "Fat JAR built successfully."
+          if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ] || [ -f "target/hello-world-app-1.0-SNAPSHOT.jar.original" ]; then
+            mvn spring-boot:repackage -e -X
+            if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ]; then
+              echo "Fat JAR built successfully."
+            else
+              echo "ERROR: Fat JAR file not found in target directory!" >&2
+              exit 1
+            fi
           else
-            echo "ERROR: Fat JAR file not found in target directory!" >&2
+            echo "ERROR: Cannot repackage because the original JAR file was not found." >&2
             exit 1
           fi
 
@@ -50,7 +55,7 @@ jobs:
         working-directory: ./Application
         run: curl -Lo dd-java-agent.jar 'https://dtdg.co/latest-java-tracer'
 
-      # Debug Step 1: Move the Necessary Files to Build Context
+      # Step 6: Move the Necessary Files to Build Context
       - name: Move Files for Docker Build
         working-directory: ./Application
         run: |
@@ -61,17 +66,17 @@ jobs:
             exit 1
           fi
 
-      # Debug Step 2: List Application Directory
+      # Step 7: List Application Directory
       - name: List Application Directory
         working-directory: ./Application
         run: ls -R
 
-      # Debug Step 3: Set File Permissions
+      # Step 8: Set File Permissions
       - name: Set File Permissions
         working-directory: ./Application
         run: chmod 644 Dockerfile app.jar dd-java-agent.jar
 
-      # Step 6: Log in to GitHub Container Registry
+      # Step 9: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -79,13 +84,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 7: Build Docker Image
+      # Step 10: Build Docker Image
       - name: Build Docker Image
         working-directory: ./Application
         run: |
           docker build --no-cache -t ghcr.io/${{ github.repository_owner }}/hello-world-app:${{ github.run_number }} -f Dockerfile .
 
-      # Step 8: Push Docker Image to GitHub Packages
+      # Step 11: Push Docker Image to GitHub Packages
       - name: Push Docker Image
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/hello-world-app:${{ github.run_number }}
