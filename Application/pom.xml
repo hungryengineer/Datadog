@@ -88,9 +88,6 @@
                 </executions>
                 <configuration>
                     <mainClass>com.example.helloworld.HelloWorldApplication</mainClass>
-                    <layout>JAR</layout>
-                    <verbose>true</verbose>
-                    <skipIfEmpty>false</skipIfEmpty> <!-- Ensure repackage doesn't skip if the JAR is not found -->
                 </configuration>
             </plugin>
         </plugins>
