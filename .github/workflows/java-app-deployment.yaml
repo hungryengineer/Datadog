@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'temurin' # Updated to use Temurin JDK
+          distribution: 'temurin'
 
       # Step 3: Clean and Build with Maven in Debug Mode
       - name: Clean and Build with Maven (Debug)
@@ -33,11 +33,19 @@ jobs:
             exit 1
           fi
 
-      # Step 4: Manually Run Spring Boot Repackage (if JAR exists)
+      # Step 4: Ensure JAR File is Present for Repackage
+      - name: Ensure JAR File is Present for Repackage
+        working-directory: ./Application
+        run: |
+          if [ ! -f "target/hello-world-app-1.0-SNAPSHOT.jar" ] && [ -f "target/hello-world-app-1.0-SNAPSHOT.jar.original" ]; then
+            mv target/hello-world-app-1.0-SNAPSHOT.jar.original target/hello-world-app-1.0-SNAPSHOT.jar
+          fi
+
+      # Step 5: Manually Run Spring Boot Repackage (if JAR exists)
       - name: Manually Run Spring Boot Repackage
         working-directory: ./Application
         run: |
-          if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ] || [ -f "target/hello-world-app-1.0-SNAPSHOT.jar.original" ]; then
+          if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ]; then
             mvn spring-boot:repackage -e -X
             if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ]; then
               echo "Fat JAR built successfully."
@@ -50,12 +58,12 @@ jobs:
             exit 1
           fi
 
-      # Step 5: Download Datadog Java Agent
+      # Step 6: Download Datadog Java Agent
       - name: Download Datadog Java Agent
         working-directory: ./Application
         run: curl -Lo dd-java-agent.jar 'https://dtdg.co/latest-java-tracer'
 
-      # Step 6: Move the Necessary Files to Build Context
+      # Step 7: Move the Necessary Files to Build Context
       - name: Move Files for Docker Build
         working-directory: ./Application
         run: |
@@ -66,17 +74,17 @@ jobs:
             exit 1
           fi
 
-      # Step 7: List Application Directory
+      # Step 8: List Application Directory
       - name: List Application Directory
         working-directory: ./Application
         run: ls -R
 
-      # Step 8: Set File Permissions
+      # Step 9: Set File Permissions
       - name: Set File Permissions
         working-directory: ./Application
         run: chmod 644 Dockerfile app.jar dd-java-agent.jar
 
-      # Step 9: Log in to GitHub Container Registry
+      # Step 10: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -84,40 +92,40 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 10: Build Docker Image
+      # Step 11: Build Docker Image
       - name: Build Docker Image
         working-directory: ./Application
         run: |
           docker build --no-cache -t ghcr.io/${{ github.repository_owner }}/hello-world-app:${{ github.run_number }} -f Dockerfile .
 
-      # Step 11: Push Docker Image to GitHub Packages
+      # Step 12: Push Docker Image to GitHub Packages
       - name: Push Docker Image
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/hello-world-app:${{ github.run_number }}
 
   deploy:
-    runs-on: ubuntu-latest
-    needs: [build-and-push]
+      runs-on: ubuntu-latest
+      needs: [build-and-push]
 
-    steps:
-      - uses: actions/checkout@v2
+      steps:
+        - uses: actions/checkout@v2
 
-      - name: AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+        - name: AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ap-south-1
 
-      - name: helm deploy
-        uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
-          cluster-name: arcade-eks
-          config-files: ./Application/java-helm/values.yaml
-          chart-path: ./Application/java-helm
-          version: ${{ github.run_number }}
-          namespace: java
-          name: java-release
+        - name: helm deploy
+          uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ap-south-1
+            cluster-name: arcade-eks
+            config-files: ./Application/java-helm/values.yaml
+            chart-path: ./Application/java-helm
+            version: ${{ github.run_number }}
+            namespace: java
+            name: java-release
