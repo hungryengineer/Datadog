@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'adopt'
+          distribution: 'temurin' # Updated to use Temurin JDK
 
       # Step 3: Clean and Build with Maven in Debug Mode
       - name: Clean and Build with Maven (Debug)
