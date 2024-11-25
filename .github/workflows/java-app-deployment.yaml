@@ -32,13 +32,12 @@ jobs:
         run: curl -Lo dd-java-agent.jar 'https://dtdg.co/latest-java-tracer'
 
       # Debug Step 1: Move the Necessary Files to Build Context
-      - name: Prepare Docker Build Context
+      - name: Move Files for Docker Build
         working-directory: ./Application
         run: |
-          # Move the generated JAR file and Datadog Java agent to the root of Application for Docker build
-          cp target/hello-world-app-1.0-SNAPSHOT.jar app.jar
-          # dd-java-agent.jar is already in the correct location
-          
+          mv target/hello-world-app-1.0-SNAPSHOT.jar app.jar
+
+
       # Debug Step 2: List Application Directory
       - name: List Application Directory
         working-directory: ./Application
@@ -55,7 +54,7 @@ jobs:
       # Step 6: Build Docker Image
       - name: Build Docker Image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/hello-world-app:${{github.run_number}} -f ./Application/Dockerfile .
+          docker build -t ghcr.io/${{ github.repository_owner }}/hello-world-app:${{github.run_number}} -f Dockerfile .
 
       # Step 7: Push Docker Image to GitHub Packages
       - name: Push Docker Image
