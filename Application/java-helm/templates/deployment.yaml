@@ -27,7 +27,7 @@ spec:
           ports:
             - containerPort: 8080
               protocol: TCP
-          {{- if .Values.env }}
+          # {{- if .Values.env }}
           # env:
           #   {{- toYaml .Values.env | nindent 12 }}
           {{- end }}
