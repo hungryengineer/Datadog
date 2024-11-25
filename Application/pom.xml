@@ -43,6 +43,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <mainClass>com.example.helloworld.HelloWorldApplication</mainClass>
+                </configuration>
             </plugin>
 
             <!-- Maven Compiler Plugin to set Java version -->
