@@ -21,18 +21,19 @@ jobs:
           java-version: 17
           distribution: 'adopt'
 
-      # Step 3: Clean and Build the Java Application with Debug
+      # Step 3: Clean and Build with Maven and Debug
       - name: Clean and Build with Maven (Debug)
         working-directory: ./Application
         run: |
           mvn clean package -U -X
+          if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ]; then
+            echo "JAR built successfully."
+          else
+            echo "ERROR: JAR file not found in target directory!" >&2
+            exit 1
+          fi
 
-      # Step 4: Force Dependency Download
-      - name: Force Download Dependencies
-        working-directory: ./Application
-        run: mvn dependency:go-offline
-
-      # Step 5: Download Datadog Java Agent
+      # Step 4: Download Datadog Java Agent
       - name: Download Datadog Java Agent
         working-directory: ./Application
         run: curl -Lo dd-java-agent.jar 'https://dtdg.co/latest-java-tracer'
@@ -41,28 +42,19 @@ jobs:
       - name: Move Files for Docker Build
         working-directory: ./Application
         run: |
-          if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ]; then
-            mv target/hello-world-app-1.0-SNAPSHOT.jar app.jar
-          else
-            echo "JAR file not found, manual repackage may be needed."
-          fi
+          mv target/hello-world-app-1.0-SNAPSHOT.jar app.jar
 
-      # Debug Step 2: Manually Run Spring Boot Repackage (if needed)
-      - name: Manually Run Spring Boot Repackage
-        working-directory: ./Application
-        run: mvn spring-boot:repackage
-
-      # Debug Step 3: List Application Directory
+      # Debug Step 2: List Application Directory
       - name: List Application Directory
         working-directory: ./Application
         run: ls -R
 
-      # Debug Step 4: Set File Permissions
+      # Debug Step 3: Set File Permissions
       - name: Set File Permissions
         working-directory: ./Application
         run: chmod 644 Dockerfile app.jar dd-java-agent.jar
 
-      # Step 6: Log in to GitHub Container Registry
+      # Step 5: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -70,16 +62,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 7: Build Docker Image
+      # Step 6: Build Docker Image
       - name: Build Docker Image
         working-directory: ./Application
         run: |
           docker build --no-cache -t ghcr.io/${{ github.repository_owner }}/hello-world-app:${{ github.run_number }} -f Dockerfile .
 
-      # Step 8: Push Docker Image to GitHub Packages
+      # Step 7: Push Docker Image to GitHub Packages
       - name: Push Docker Image
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/hello-world-app:${{ github.run_number }}
+          docker push ghcr.io/${{ github.repository_owner }}/hello-world-app:${{github.run_number}}
 
   deploy:
     runs-on: ubuntu-latest
