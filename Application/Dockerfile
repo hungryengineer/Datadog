@@ -10,7 +10,7 @@ ENV DD_TRACE_AGENT_PORT=8126
 
 # Copy the Datadog Java Agent and application JAR file into the image
 COPY dd-java-agent.jar /dd-java-agent.jar
-COPY target/hello-world-app-1.0-SNAPSHOT.jar /app.jar
+COPY target/hello-world-app-1.0-SNAPSHOT.jar.original /app.jar
 # Expose the default Spring Boot port
 EXPOSE 8080
 
