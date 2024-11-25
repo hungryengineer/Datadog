@@ -21,11 +21,11 @@ jobs:
           java-version: 17
           distribution: 'adopt'
 
-      # Step 3: Clean and Build with Maven and Debug
+      # Step 3: Clean and Build with Maven in Debug Mode
       - name: Clean and Build with Maven (Debug)
         working-directory: ./Application
         run: |
-          mvn clean package -U -X
+          mvn clean package -U -e -X
           if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ]; then
             echo "JAR built successfully."
           else
@@ -42,7 +42,12 @@ jobs:
       - name: Move Files for Docker Build
         working-directory: ./Application
         run: |
-          mv target/hello-world-app-1.0-SNAPSHOT.jar app.jar
+          if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ]; then
+            mv target/hello-world-app-1.0-SNAPSHOT.jar app.jar
+          else
+            echo "ERROR: JAR file not found for Docker build." >&2
+            exit 1
+          fi
 
       # Debug Step 2: List Application Directory
       - name: List Application Directory
@@ -71,7 +76,7 @@ jobs:
       # Step 7: Push Docker Image to GitHub Packages
       - name: Push Docker Image
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/hello-world-app:${{github.run_number}}
+          docker push ghcr.io/${{ github.repository_owner }}/hello-world-app:${{ github.run_number }}
 
   deploy:
     runs-on: ubuntu-latest

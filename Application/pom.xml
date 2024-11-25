@@ -38,6 +38,8 @@
                 <version>${spring-boot.version}</version>
                 <executions>
                     <execution>
+                        <id>repackage</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>repackage</goal>
                         </goals>
