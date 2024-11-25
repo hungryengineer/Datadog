@@ -54,7 +54,7 @@ jobs:
       # Step 6: Build Docker Image
       - name: Build Docker Image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/hello-world-app:${{github.run_number}} -f Dockerfile .
+          docker build -t ghcr.io/${{ github.repository_owner }}/hello-world-app:${{github.run_number}} -f ./Dockerfile .
 
       # Step 7: Push Docker Image to GitHub Packages
       - name: Push Docker Image
