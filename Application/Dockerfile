@@ -1,5 +1,5 @@
 # Use a lightweight base image with Java runtime
-FROM openjdk:11-jre-slim
+FROM openjdk:17-jre-slim
 
 # Set Datadog APM environment variables
 ENV DD_SERVICE=hello-world-app
@@ -10,10 +10,10 @@ ENV DD_TRACE_AGENT_PORT=8126
 
 # Copy the Datadog Java Agent and application JAR file into the image
 COPY dd-java-agent.jar /dd-java-agent.jar
-COPY target/helloworld-1.0-SNAPSHOT.jar app.jar
+COPY target/hello-world-app-1.0-SNAPSHOT.jar /app.jar
 
 # Expose the default Spring Boot port
 EXPOSE 8080
 
 # Run the application with the Datadog APM Java agent
-ENTRYPOINT ["java", "-javaagent:/dd-java-agent.jar", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-javaagent:/dd-java-agent.jar", "-jar", "/app.jar"]
