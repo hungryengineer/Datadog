@@ -8,7 +8,7 @@ image:
   repository: ghcr.io/hungryengineer/hello-world-app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 17 #NEED TO AUTOMATE THIS
+  tag: 18 #NEED TO AUTOMATE THIS
 
 imagePullSecrets: []
 nameOverride: ""

@@ -13,12 +13,12 @@ spec:
       app: java
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
         app: java
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
+      {{- end }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -27,5 +27,7 @@ spec:
           ports:
             - containerPort: 8080
               protocol: TCP
-          env: {{ .Values.env }}
-          
+          {{- if .Values.env }}
+          env:
+            {{- toYaml .Values.env | nindent 12 }}
+          {{- end }}
