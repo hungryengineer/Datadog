@@ -69,6 +69,20 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+
+            <!-- Add maven-jar-plugin to specify manifest details if needed -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.example.helloworld.HelloWorldApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
