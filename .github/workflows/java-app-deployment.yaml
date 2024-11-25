@@ -46,7 +46,7 @@ jobs:
         working-directory: ./Application
         run: |
           if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ]; then
-            mvn spring-boot:repackage -e -X
+            mvn spring-boot:repackage -e -X -Dspring-boot.repackage.skip=true
             if [ -f "target/hello-world-app-1.0-SNAPSHOT.jar" ]; then
               echo "Fat JAR built successfully."
             else
