@@ -35,10 +35,10 @@ jobs:
       - name: Prepare Docker Build Context
         working-directory: ./Application
         run: |
-          mkdir -p docker/build-context
-          cp target/hello-world-app-1.0-SNAPSHOT.jar docker/build-context/app.jar
-          cp dd-java-agent.jar docker/build-context/
-
+          # Move the generated JAR file and Datadog Java agent to the root of Application for Docker build
+          cp target/hello-world-app-1.0-SNAPSHOT.jar app.jar
+          # dd-java-agent.jar is already in the correct location
+          
       # Debug Step 2: List Application Directory
       - name: List Application Directory
         working-directory: ./Application
