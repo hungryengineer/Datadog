@@ -1,13 +1,13 @@
 name: Build and Deploy Java App
 
 on:
-  workflow_dispatch
-
+  push:
+    branches: [ "feature_ansh" ]
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' # Running this job only for pre-master branch
+    if: github.ref == 'refs/heads/feature_ansh' # Running this job only for pre-master branch
 
     steps:
       # Step 1: Checkout Code
