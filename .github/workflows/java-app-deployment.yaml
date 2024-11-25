@@ -88,8 +88,8 @@ jobs:
                   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   aws-region: ap-south-1
                   cluster-name: arcade-eks
-                  config-files: ./Datadog/Application/java-helm/values.yaml
-                  chart-path: ./Datadog/Application/java-helm
+                  config-files: ./Application/java-helm/values.yaml
+                  chart-path: ./Application/java-helm
                   version: ${{ github.run_number }}
                   namespace: java
                   name: java-release
