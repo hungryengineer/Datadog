@@ -8,7 +8,7 @@ image:
   repository: ghcr.io/hungryengineer/hello-world-app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 48 #NEED TO AUTOMATE THIS
+  tag: 49 #NEED TO AUTOMATE THIS
 
 imagePullSecrets: []
 nameOverride: ""
@@ -80,8 +80,8 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-env:
-  - name: DD_AGENT_HOST
-    value: "localhost"
-  - name: DD_TRACE_AGENT_PORT
-    value: "8126"
+# env:
+#   - name: DD_AGENT_HOST
+#     value: "localhost"
+#   - name: DD_TRACE_AGENT_PORT
+#     value: "8126"
