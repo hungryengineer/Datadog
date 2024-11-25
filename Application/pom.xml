@@ -15,7 +15,7 @@
         <!-- Spring Boot Version -->
         <spring-boot.version>3.1.2</spring-boot.version>
         <!-- Java Version -->
-        <java.version>11</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
