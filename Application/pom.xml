@@ -38,28 +38,6 @@
 
     <build>
         <plugins>
-            <!-- Spring Boot Maven Plugin to create a fat JAR with all dependencies -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-                <executions>
-                    <execution>
-                        <id>repackage</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>com.example.helloworld.HelloWorldApplication</mainClass>
-                    <layout>JAR</layout>
-                    <verbose>true</verbose>
-                    <skipIfEmpty>true</skipIfEmpty>
-                </configuration>
-            </plugin>
-
             <!-- Maven Compiler Plugin to set Java version -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -91,6 +69,28 @@
                             <mainClass>com.example.helloworld.HelloWorldApplication</mainClass>
                         </manifest>
                     </archive>
+                </configuration>
+            </plugin>
+
+            <!-- Spring Boot Maven Plugin to create a fat JAR with all dependencies -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.example.helloworld.HelloWorldApplication</mainClass>
+                    <layout>JAR</layout>
+                    <verbose>true</verbose>
+                    <skipIfEmpty>false</skipIfEmpty> <!-- Ensure repackage doesn't skip if the JAR is not found -->
                 </configuration>
             </plugin>
         </plugins>
