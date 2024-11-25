@@ -1,5 +1,6 @@
 # Use a lightweight base image with Java runtime
-FROM openjdk:17-jre-slim
+FROM openjdk:17-slim
+
 
 # Set Datadog APM environment variables
 ENV DD_SERVICE=hello-world-app
