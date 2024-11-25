@@ -2,12 +2,12 @@ name: Build and Deploy Java App
 
 on:
   push:
-    branches: [ "feature_ansh" ]
+    branches: [ "master" ]
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/feature_ansh' # Running this job only for pre-master branch
+    if: github.ref == 'refs/heads/master' # Running this job only for pre-master branch
 
     steps:
       # Step 1: Checkout Code
@@ -23,6 +23,7 @@ jobs:
 
       # Step 3: Build the Java Application
       - name: Build with Maven
+        working-directory: ./Application
         run: mvn clean package
 
       # Step 4: Log in to GitHub Container Registry
