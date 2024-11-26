@@ -34,10 +34,10 @@ jobs:
         run: curl -Lo dd-java-agent.jar 'https://dtdg.co/latest-java-tracer'
 
       # Debug Step 1: Move the Necessary Files to Build Context
-      - name: Move Files for Docker Build
-        working-directory: ./Application
-        run: |
-          mv target/hello-world-app-1.0-SNAPSHOT.jar app.jar
+      # - name: Move Files for Docker Build
+      #   working-directory: ./Application
+      #   run: |
+      #     mv target/hello-world-app-1.0-SNAPSHOT.jar app.jar
 
 
       # Debug Step 2: List Application Directory
