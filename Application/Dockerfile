@@ -2,7 +2,7 @@
 FROM openjdk:17-slim
 
 # Set Datadog APM environment variables
-ENV DD_SERVICE=hello-world-app
+ENV DD_SERVICE=hello-world-app 
 ENV DD_ENV=dev
 ENV DD_VERSION=1.0.0
 ENV DD_AGENT_HOST=localhost
