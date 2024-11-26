@@ -46,9 +46,9 @@ jobs:
         run: ls -R
 
       # Debug step 3: Set File Permissions
-      - name: Set File Permissions
-        working-directory: ./Application
-        run: chmod 644 Dockerfile app.jar dd-java-agent.jar
+      # - name: Set File Permissions
+      #   working-directory: ./Application
+      #   run: chmod 644 Dockerfile app.jar dd-java-agent.jar
 
       # Step 5: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
