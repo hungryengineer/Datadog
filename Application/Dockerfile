@@ -5,7 +5,7 @@ FROM openjdk:17-slim
 ENV DD_SERVICE=sample-java
 ENV DD_ENV=poc
 ENV DD_VERSION=1.0.0
-ENV DD_AGENT_HOST=datadog-agent.default.svc.cluster.local
+ENV DD_AGENT_HOST=datadog-agent.datadog-system.svc.cluster.local
 ENV DD_TRACE_AGENT_PORT=8126
 
 # Copy the Datadog Java Agent and application JAR file into the image
