@@ -4,7 +4,7 @@ This repo will contain:
 2. Based on a simple Java application
 3. Fully automated using Github action pipeline and github packages as container repository
 ___________________________________________________________________
-
+# after application deployment, execute the shell script (helm-bash.sh) to automate the below steps:
 # Helm installation steps:
 1. helm repo add datadog https://helm.datadoghq.com
 2. helm repo update
