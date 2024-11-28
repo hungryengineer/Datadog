@@ -8,7 +8,7 @@ image:
   repository: ghcr.io/hungryengineer/hello-world-app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 60 #NEED TO AUTOMATE THIS
+  tag: 61 #NEED TO AUTOMATE THIS
 
 imagePullSecrets: []
 nameOverride: ""
@@ -24,7 +24,7 @@ serviceAccount:
   name: ""
 
 podAnnotations:
-  ad.datadoghq.com/app.logs: '[{"source":"java", "service":"java-deploy", "tags":["env:poc"]}]'
+  ad.datadoghq.com/app.logs: '[{"source":"java", "service":"hello-world-app", "tags":["env:poc"]}]'
 
 
 podSecurityContext: {}
