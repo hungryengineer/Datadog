@@ -4,6 +4,9 @@ metadata:
   name: java-deploy
   labels:
     app: java
+    {{- with .Values.labels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -15,9 +18,13 @@ spec:
     metadata:
       labels:
         app: java
+        admission.datadoghq.com/enabled: "true" # Enable Admission Controller to mutate new pods part of this deployment
+        {{- with .Values.labels }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
       {{- if .Values.podAnnotations }}
       annotations:
-        {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{ toYaml .Values.podAnnotations | nindent 8 }}
       {{- end }}
     spec:
       containers:
@@ -27,7 +34,3 @@ spec:
           ports:
             - containerPort: 8080
               protocol: TCP
-          # {{- if .Values.env }}
-          # env:
-          #   {{- toYaml .Values.env | nindent 12 }}
-          # {{- end }}
