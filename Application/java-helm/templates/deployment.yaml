@@ -5,7 +5,7 @@ metadata:
   labels:
     app: java
     {{- with .Values.labels }}
-    {{- toYaml . | nindent 4 }}
+    {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
@@ -20,12 +20,11 @@ spec:
         app: java
         admission.datadoghq.com/enabled: "true" # Enable Admission Controller to mutate new pods part of this deployment
         {{- with .Values.labels }}
-        {{- toYaml . | nindent 4 }}
+        {{ toYaml . | nindent 8 }}
         {{- end }}
-
       {{- if .Values.podAnnotations }}
       annotations:
-        {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{ toYaml .Values.podAnnotations | nindent 8 }}
       {{- end }}
     spec:
       containers:
