@@ -4,7 +4,15 @@ This repo will contain:
 2. Based on a simple Java application
 3. Fully automated using Github action pipeline and github packages as container repository
 ___________________________________________________________________
-# after application deployment, execute the shell script (helm-bash.sh) to automate the below steps:
+# Workflow
+1. Go to actions tab and execute the latest workflow store in the actions pipeline java-app-deployment.yaml
+2. This will do the below:
+    i) build the code
+    ii) create an image using the dockerfile 
+    iii) push the image into github packages 
+    iv) install the Java application using helm charts defined in the folder java-helm
+3. After application deployment, execute the shell script (helm-bash.sh) to automate the below steps:
+
 # Helm installation steps:
 1. helm repo add datadog https://helm.datadoghq.com
 2. helm repo update
