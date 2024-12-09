@@ -27,6 +27,15 @@ ii) kubectl apply -f cm.yaml,pv.yaml,rbac.yaml,secret.yaml,sts.yaml
 iii) Access the Management UI using the loadbalancer DNS appended with port 15672
 
 ## Apache Kafka
-
+1. Installation steps:
+i) cd kafka
+ii) kubectl apply -f netpol.yaml,zookeeper.yaml,kafka.yaml,pv.yaml
+iii) Testing of the setup:
+a) k apply -f kcat.yaml
+b)  kubectl exec -it kcat-pod-name -- bash
+PUB:
+echo "TEST" | kafkacat -b kafka:29092 -t newtopic123 -p -1
+SUB:
+kafkacat -C -b kafka:29092 -t newtopic123 -p -1
 
 
