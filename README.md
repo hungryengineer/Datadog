@@ -48,4 +48,33 @@ ________________________________________________________
      3. CREATE DATABASE testdb;
      4. \l to list all dbs
 
+_________________________________________________________
+
+## MongoDB
+1. Installation steps (using mongo kubernetes operator):
+    1. helm repo add mongodb https://mongodb.github.io/helm-charts
+    2. helm install atlas-operator --namespace=atlas-operator       --create-namespace mongodb/mongodb-atlas-operator
+    3. helm install atlas-deployment \
+        mongodb/atlas-deployment \
+        --namespace=my-cluster \
+        --create-namespace \
+        --set atlas.secret.orgId='6757f067973ec6666c04f524' \
+        --set atlas.secret.publicApiKey='porplyod' \
+        --set atlas.secret.privateApiKey='9d43ca20-dc3d-47c8-bf5e-19cb6f0ffd37' \
+        --values install-values.yaml
+2. Check the status of the cluster and database using command:
+    kubectl get atlasdeployment -n <namespace>
+    If the deployment is not ready or any other issue, change the instance size to M0 (free tier) under spec using kubectl edit command
+3. Testing the set-up:
+   1. mongosh "mongodb+srv://myUser:<password>@myCluster.mongodb.net"
+   2. use test
+      db.myCollection.insert({ name: "MongoDB Atlas Operator Test" })
+   3. db.myCollection.find()
+
+
+
+
+
+
+
  
