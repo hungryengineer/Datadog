@@ -1,4 +1,7 @@
 # Overview
+
+![alt text](datadog_kubernetes_integration.png)
+
 This repo will contain:
 1. Datadog integration with kubernetes 
 2. Based on a simple Java application
