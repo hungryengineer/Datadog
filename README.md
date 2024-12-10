@@ -58,9 +58,9 @@ _________________________________________________________
         mongodb/atlas-deployment \
         --namespace=my-cluster \
         --create-namespace \
-        --set atlas.secret.orgId='6757f067973ec6666c04f524' \
-        --set atlas.secret.publicApiKey='porplyod' \
-        --set atlas.secret.privateApiKey='9d43ca20-dc3d-47c8-bf5e-19cb6f0ffd37' \
+        --set atlas.secret.orgId='' \
+        --set atlas.secret.publicApiKey='' \
+        --set atlas.secret.privateApiKey='' \
         --values install-values.yaml
 2. Check the status of the cluster and database using command:
     kubectl get atlasdeployment -n <namespace>
