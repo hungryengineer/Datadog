@@ -40,13 +40,24 @@ datadog:
     enabled: true
   confd:
     rabbitmq.yaml: |-
+      ad_identifiers:
+        - rabbitmq
       init_config: {}
       instances:
-        - rabbitmq_api_url: "http://a7614d85d73374b4a9648ff961a0aedf-2108593202.ap-south-1.elb.amazonaws.com/:15672/api/"
+        - rabbitmq_api_url: "http://<LB url>:15672/api/"
           rabbitmq_user: "guest"
           rabbitmq_pass: "guest"
           tags:
-            - "cluster:rabbitmq-cluster"
+            - "env:poc"
+      logs:
+        - type: file
+          path: "/var/log/rabbitmq/rabbit.log"
+          service: "rabbitmq"
+          source: "rabbitmq"
+        - type: file
+          path: "/var/log/rabbitmq/rabbit-sasl.log"
+          service: "rabbitmq"
+          source: "rabbitmq"
 EOL
 
 # Step 5: Deploy the Datadog Agent using the created values file

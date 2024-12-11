@@ -12,6 +12,28 @@ spec:
     metadata:
       labels:
         app: rabbitmq
+        datadoghq.com/logs: "true"  # Enable Datadog log collection
+      annotations:
+        ad.datadoghq.com/rabbitmq.logs: |
+          [{
+            "source": "rabbitmq",
+            "service": "rabbitmq",
+            "log_processing_rules": [{
+              "type": "multi_line",
+              "name": "logs_starts_with_equal_sign",
+              "pattern": "="
+            }]
+          }]
+        ad.datadoghq.com/rabbitmq.checks: |
+          [{
+            "init_config": {},
+            "instances": [{
+              "rabbitmq_api_url": "http://%%host%%:15672/api/",
+              "rabbitmq_user": "guest",
+              "rabbitmq_pass": "guest",
+              "tags": ["env:production", "team:platform"]
+            }]
+          }]
     spec:
       serviceAccountName: rabbitmq
       initContainers:
@@ -34,6 +56,8 @@ spec:
           name: discovery
         - containerPort: 5672
           name: amqp
+        - containerPort: 15672
+          name: management
         env:
         - name: RABBIT_POD_NAME
           valueFrom:
@@ -57,14 +81,18 @@ spec:
               key: RABBITMQ_ERLANG_COOKIE
         - name: K8S_HOSTNAME_SUFFIX
           value: .rabbitmq.$(RABBIT_POD_NAMESPACE).svc.cluster.local
+        - name: RABBITMQ_LOGS
+          value: "/var/log/rabbitmq/rabbit.log"
+        - name: RABBITMQ_LOG_LEVEL
+          value: "info"
         volumeMounts:
-        - name: data
-          mountPath: /var/lib/rabbitmq
-          readOnly: false
         - name: config-file
           mountPath: /config/
         - name: plugins-file
           mountPath: /etc/rabbitmq/
+        - name: rabbitmq-logs
+          mountPath: /var/log/rabbitmq
+          readOnly: false
       volumes:
       - name: config-file
         emptyDir: {}
@@ -74,6 +102,8 @@ spec:
         configMap:
           name: rabbitmq-config
           defaultMode: 0755
+      - name: rabbitmq-logs
+        emptyDir: {}
   volumeClaimTemplates:
   - metadata:
       name: data
@@ -102,4 +132,3 @@ spec:
     name: management
   selector:
     app: rabbitmq
-
