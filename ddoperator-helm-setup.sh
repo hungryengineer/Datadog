@@ -38,6 +38,15 @@ datadog:
     enabled: true
   networkMonitoring:
     enabled: true
+  confd:
+    rabbitmq.yaml: |-
+      init_config: {}
+      instances:
+        - rabbitmq_api_url: "http://a7614d85d73374b4a9648ff961a0aedf-2108593202.ap-south-1.elb.amazonaws.com/:15672/api/"
+          rabbitmq_user: "guest"
+          rabbitmq_pass: "guest"
+          tags:
+            - "cluster:rabbitmq-cluster"
 EOL
 
 # Step 5: Deploy the Datadog Agent using the created values file
